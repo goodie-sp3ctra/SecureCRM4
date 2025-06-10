@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - CRM System{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="text-center mb-4">
+    <h1>Welcome to the CRM System!</h1>
+    <p class="lead">Manage your customers efficiently and easily.</p>
+  </div>
+
+  {% if user.is_authenticated %}
+    <div class="row">
+      <!-- Add Customer Card -->
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0">
+          <div class="card-body text-center">
+            <h5 class="card-title">Add Customer</h5>
+            <p class="card-text">Create a new customer record.</p>
+            <a href="{% url 'add_customer' %}" class="btn btn-success">Add Customer</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- View Customers Card -->
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0">
+          <div class="card-body text-center">
+            <h5 class="card-title">View Customers</h5>
+            <p class="card-text">Browse all customer records.</p>
+            <a href="{% url 'customer-list' %}" class="btn btn-info">View Customers</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Customer Card -->
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0">
+          <div class="card-body text-center">
+            <h5 class="card-title">Search Customer</h5>
+            <p class="card-text">Find a specific customer by name.</p>
+            <a href="{% url 'search_customer' %}" class="btn btn-warning">Search</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="text-center">
+      <a href="{% url 'login' %}" class="btn btn-primary me-2">Login</a>
+      <a href="{% url 'register' %}" class="btn btn-secondary">Register</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

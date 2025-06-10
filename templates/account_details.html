@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Account Details{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Account Details</h2>
+
+<style>
+    .square-box {
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        min-height: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .square-box h5 {
+        text-align: center;
+        color: #007bff;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="row text-center">
+    <!-- Box 1: JPS Account Details -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="square-box">
+            <h5>JPS Account Details</h5>
+            <div class="text-left">
+                <p><strong>Gau Branch</strong></p>
+                <p><strong>Account:</strong> Just Power Solutions SA (Pty) Ltd</p>
+                <p><strong>Bank:</strong> First National Bank</p>
+                <p><strong>Account No:</strong> 6277 1328 088</p>
+                <p><strong>Branch Code:</strong> 250655</p>
+                <hr>
+                <p><strong>KZN Branch</strong></p>
+                <p><strong>Account:</strong> Just Power KZN (Pty) Ltd</p>
+                <p><strong>Bank:</strong> First National Bank</p>
+                <p><strong>Account No:</strong> 6303 6405 107</p>
+                <p><strong>Branch Code:</strong> 210835</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Box 2: DSGSA Account Details -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="square-box">
+            <h5>DSGSA Account Details</h5>
+            <div class="text-left">
+                <p><strong>Gau Branch</strong></p>
+                <p><strong>Account No:</strong> 6275 8115 052</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Box 3: MYC Account Details -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="square-box">
+            <h5>MYC Account Details</h5>
+            <div class="text-left">
+                <p><strong>Bank:</strong> First National Bank</p>
+                <p><strong>Account:</strong> My Connect (Pty) Ltd</p>
+                <p><strong>Account No:</strong> 6243 8949 523</p>
+                <p><strong>Branch Code:</strong> 250655</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Box 4: CBS Account Details -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="square-box">
+            <h5>CBS Account Details</h5>
+            <div class="text-left">
+                <p><strong>Bank:</strong> First National Bank</p>
+                <p><strong>Account:</strong> CBSSA (Pty) Ltd</p>
+                <p><strong>Account No:</strong> 6245 7423 897</p>
+                <p><strong>Branch:</strong> Bedford Gardens</p>
+                <p><strong>Branch Code:</strong> 250655</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
