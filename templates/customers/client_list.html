@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Clients</h1>
+<ul>
+    {% for client in clients %}
+    <li>
+        <a href="{% url 'customers:detail' client.pk %}">
+            {{ client.company_name }}
+        </a>
+    </li>
+    {% empty %}
+    <li>No clients yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ client.company_name }}</h1>
+<p>Contact: {{ client.contact_name }} &mdash; {{ client.contact_email }}</p>
+<p>Phone: {{ client.phone }}</p>
+<p>Status: {{ client.status }}</p>
+<p>Address: {{ client.address }}</p>
+{% endblock %}

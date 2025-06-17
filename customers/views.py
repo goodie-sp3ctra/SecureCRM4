@@ -7,9 +7,14 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.contrib.auth.hashers import make_password
+from django import forms
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView
+from .models import Client
+from .forms import ClientForm
 import re
 
-from .models import Customer
+from .models import Client
 
 # Password strength validator
 def is_strong_password(password):
@@ -51,12 +56,12 @@ def add_customer(request):
                 'error': 'Password must be at least 8 characters long, include uppercase, lowercase, a number, and a symbol.'
             })
 
-        if Customer.objects.filter(email=email).exists():
+        if Client.objects.filter(email=email).exists():
             return render(request, 'customers/add_customer.html', {'error': 'A customer with this email already exists!'})
 
         try:
             hashed_password = make_password(password)
-            Customer.objects.create(
+            Client.objects.create(
                 name=name,
                 email=email,
                 phone_number=phone,
@@ -105,10 +110,10 @@ def user_logout(request):
 
 # Customer List View
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
-class CustomerList(ListView):
-    model = Customer
-    template_name = 'customers/customer_list.html'
-    context_object_name = 'customers'
+class ClientListView(ListView):
+    model = Client
+    template_name = 'customers/client_list.html'
+    context_object_name = 'client'
     paginate_by = 10
 
     def get_context_data(self, **kwargs):
@@ -120,16 +125,16 @@ class CustomerList(ListView):
 
 # Customer Detail View
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
-class CustomerDetail(DetailView):
-    model = Customer
-    template_name = 'customers/customer_detail.html'
-    context_object_name = 'customer'
+class ClientDetail(DetailView):
+    model = Client
+    template_name = 'customers/client_detail.html'
+    context_object_name = 'client'
 
 # Search Customer View
 @login_required(login_url='/login/')
 def search_customer(request):
     query = request.GET.get('q', '')
-    customers = Customer.objects.filter(name__icontains=query) if query else Customer.objects.all()
+    customers = Client.objects.filter(name__icontains=query) if query else Client.objects.all()
     return render(request, 'customers/search_customer.html', {'customers': customers, 'query': query})
 
 # Dashboard View
@@ -145,3 +150,28 @@ def account_details(request):
 # Root redirect to login
 def root_redirect(request):
     return redirect('login')
+
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView
+from .models import Client
+from .forms import ClientForm
+
+class ClientList(ListView):
+    model = Client
+    template_name = 'customers/client_list.html'
+    context_object_name = 'clients'
+
+class ClientCreate(CreateView):
+    model = Client
+    form_class = ClientForm
+    template_name = 'customers/add_client.html'
+    success_url = reverse_lazy('customers:list')
+
+class ClientForm(forms.ModelForm):
+    class Meta:
+        model = Client
+        fields = ['company_name', 'contact_name', 'contact_email', 'phone', 'address', 'status']
+        widgets = {
+            'status': forms.Select(choices=Client.STATUS_CHOICES),
+        }
+
