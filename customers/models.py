@@ -2,33 +2,53 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth.hashers import make_password, check_password
+from django.conf import settings
+
 
 # Validator function for phone number
-def validate_phone_number(value):
-    if not value.isdigit():
-        raise ValidationError('Phone number must contain only digits.')
-    if len(value) != 10:
-        raise ValidationError('Phone number must be exactly 10 digits.')
 
-class Customer(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    phone_number = models.CharField(
-        max_length=10,
-        blank=True,
-        null=True,
-        validators=[validate_phone_number],
-        help_text="Enter a 10-digit phone number without spaces or symbols."
+import re
+
+def validate_phone_number(value):
+    pattern = re.compile(r'^\+?[0-9\- ]{7,20}$')
+    if not pattern.match(value):
+        raise ValidationError("Enter a valid phone number.")
+
+
+# customers/models.py
+from django.db import models
+from django.utils import timezone
+
+class Client(models.Model):
+    user           = models.OneToOneField(
+                     settings.AUTH_USER_MODEL,
+                     on_delete=models.CASCADE,
+                     related_name='client_profile',
     )
-    address = models.TextField(blank=True, null=True)
-    password = models.CharField(max_length=128, help_text="Password will be stored in a hashed format.")
-    date_added = models.DateTimeField(auto_now_add=True)
+    company_name   = models.CharField(max_length=255)
+    contact_name   = models.CharField(max_length=255, blank=True)
+    contact_email  = models.EmailField(blank=True)
+    phone          = models.CharField(max_length=20, blank=True)
+    address        = models.TextField(blank=True)
+    STATUS_CHOICES = [
+                     ('Active',   'Active'),
+                     ('Inactive', 'Inactive'),
+                     ]
+
+    status         = models.CharField(
+                     max_length=50,
+                     choices=STATUS_CHOICES,
+                     default='Active',
+                     )
+    created_at     = models.DateTimeField(default=timezone.now)
+    updated_at     = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.name} ({self.email})'
+        return self.company_name
+
 
     class Meta:
-        ordering = ['name']
+        ordering = ['company_name']
 
     # Save hashed password automatically
     def save(self, *args, **kwargs):

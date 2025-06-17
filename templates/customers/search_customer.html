@@ -11,7 +11,7 @@
     <div class="container mt-5">
         <h2>Search Results</h2>
         
-        <form method="get" action="{% url 'search_customer' %}">
+        <form method="get" action="{% url 'customers:search' %}">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Search by name" name="q" value="{{ query }}">
                 <button class="btn btn-primary" type="submit">Search</button>
@@ -22,7 +22,7 @@
             <ul class="list-group">
                 {% for customer in customers %}
                     <li class="list-group-item">
-                        <a href="{% url 'customer-detail' customer.pk %}">{{ customer.name }}</a>
+                        <a href="{% url 'customer:search' customer.pk %}">{{ customer.name }}</a>
                     </li>
                 {% endfor %}
             </ul>

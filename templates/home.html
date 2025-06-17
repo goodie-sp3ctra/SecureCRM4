@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container mt-5">
   <div class="text-center mb-4">
-    <h1>Welcome to the CRM System!</h1>
+    <h1>SecureCRM</h1>
     <p class="lead">Manage your customers efficiently and easily.</p>
   </div>
 
@@ -14,11 +14,11 @@
       <!-- Add Customer Card -->
       <div class="col-md-4 mb-4">
         <div class="card shadow-sm border-0">
-          <div class="card-body text-center">
-            <h5 class="card-title">Add Customer</h5>
-            <p class="card-text">Create a new customer record.</p>
-            <a href="{% url 'add_customer' %}" class="btn btn-success">Add Customer</a>
-          </div>
+            <div class="card-body text-center">
+                <h5 class="card-title">Add Customer</h5>
+                <p class="card-text">Create a new customer record.</p>
+                <a href="{% url 'customers:add' %}" class="btn btn-success">Add Customer</a>
+            </div>
         </div>
       </div>
 
@@ -28,8 +28,7 @@
           <div class="card-body text-center">
             <h5 class="card-title">View Customers</h5>
             <p class="card-text">Browse all customer records.</p>
-            <a href="{% url 'customer-list' %}" class="btn btn-info">View Customers</a>
-          </div>
+            <a href="{% url 'customers:list' %}" class="btn btn-primary">View Customers</a>
         </div>
       </div>
 
@@ -39,7 +38,7 @@
           <div class="card-body text-center">
             <h5 class="card-title">Search Customer</h5>
             <p class="card-text">Find a specific customer by name.</p>
-            <a href="{% url 'search_customer' %}" class="btn btn-warning">Search</a>
+            <a href="{% url 'customers:search' %}" class="btn btn-warning">Search</a>
           </div>
         </div>
       </div>

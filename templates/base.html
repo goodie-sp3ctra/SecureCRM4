@@ -88,11 +88,9 @@
         <div class="sidebar d-flex flex-column p-3">
             <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
             <a href="{% url 'account_details' %}" class="nav-link">Account Details</a>
-            <a href="#" class="nav-link">Existing Clients</a>
-            <a href="#" class="nav-link">Jobs</a>
-            <a href="#" class="nav-link">Prospects</a>
-            <a href="#" class="nav-link">Jobs (Prospects)</a>
-            <a href="#" class="nav-link">Jobs Report</a>
+            <a href="{% url 'customers:list' %}" class="nav-link">Existing Clients</a>
+            <a href="{% url 'customers:add' %}" class="nav-link">Add Customer</a>
+            <a href="{% url 'customers:search' %}" class="nav-link">Search Customers</a>
         </div>
 
         <!-- Page Content -->
