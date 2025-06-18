@@ -42,6 +42,8 @@ class ClientForm(forms.ModelForm):
           'address',
           'status',
         ]
+
+
         widgets = {
           'status': forms.Select(choices=Client.STATUS_CHOICES),
         }

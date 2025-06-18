@@ -78,7 +78,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'SecureCRM',                # ← PostgreSQL DB name
+        'NAME': 'SecureCRM_2',                # ← PostgreSQL DB name
         'USER': 'admin_user',               # ← PostgreSQL user
         'PASSWORD': 'BAHBEJ-TUHWO2-wYCHEQ',
         'HOST': '156.38.163.242',           # ← Server IP
