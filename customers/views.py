@@ -11,6 +11,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from .models import Client
 from .forms import ClientForm
+from django.contrib.auth.views import LoginView
 import re
 
 from .models import Client
@@ -206,5 +207,41 @@ from django.views.generic import TemplateView
 
 class HomeView(TemplateView):
     template_name = "home.html"
+
+class UserLoginView(LoginView):
+    template_name = "registration/login.html"
+    redirect_authenticated_user = True
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["admin_login"] = False
+        return ctx
+
+    def get_success_url(self):
+        # where regular users go after login
+        return self.get_redirect_url() or reverse_lazy("home")
+
+
+class AdminLoginView(LoginView):
+    template_name = "registration/login.html"
+    redirect_field_name = "next"
+    redirect_authenticated_user = True
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["admin_login"] = True
+        return ctx
+
+    def form_valid(self, form):
+        user = form.get_user()
+        if not user.is_staff:
+            form.add_error(None, "You must be an admin to log in here.")
+            return self.form_invalid(form)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        # where staff go after login; you could change to your admin dashboard URL
+        return self.get_redirect_url() or reverse_lazy("admin:index")
+
 
 
