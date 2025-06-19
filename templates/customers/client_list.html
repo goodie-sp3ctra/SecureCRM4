@@ -1,24 +1,54 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Clients</h1>
-<ul>
-    {% for client in clients %}
-    <li>
-        <a href="{% url 'customers:detail' client.pk %}">
-            {{ client.company_name }}
-        </a>
-    </li>
-    {% empty %}
-    <li>No clients yet.</li>
-    {% endfor %}
-</ul>
-{% endblock %}
+<form method="get" class="form-inline mb-3">
+    <input name="field" placeholder="JSON key" class="form-control mr-2">
+    <input name="value" placeholder="value" class="form-control mr-2">
+    <button class="btn btn-primary">Filter</button>
+    <a href="{% url 'customers:list' %}" class="btn btn-link">clear</a>
+</form>
 
-{% extends "base.html" %}
-{% block content %}
-<h1>{{ client.company_name }}</h1>
-<p>Contact: {{ client.contact_name }} &mdash; {{ client.contact_email }}</p>
-<p>Phone: {{ client.phone }}</p>
-<p>Status: {{ client.status }}</p>
-<p>Address: {{ client.address }}</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Custom Fields</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for client in object_list %}
+        <tr>
+            <td>{{ client.company_name }}</td>
+            <td>{{ client.contact_name }}</td>
+            <td>
+                <ul class="list-unstyled mb-0">
+                    {% for k,v in client.custom_fields.items %}
+                    <li><strong>{{ k }}:</strong> {{ v }}</li>
+                    {% empty %}
+                    <li><em>(none)</em></li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <a href="{% url 'customers:detail' client.pk %}">view</a> |
+                <a href="{% url 'customers:edit'  client.pk %}">edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+  {% if is_paginated %}
+<nav>
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}">&laquo; prev</a>
+    {% endif %}
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">&laquo; next</a>
+    {% endif %}
+</nav>
+  {% endif %}
 {% endblock %}

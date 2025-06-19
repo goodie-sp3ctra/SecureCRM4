@@ -70,19 +70,19 @@ class Client(models.Model):
             # gin index for fast lookups on JSONB keys
             GinIndex(fields=['custom_fields']),
         ]
-class CustomFieldDefinition(models.Model):
-    name       = models.CharField(max_length=100, unique=True)
-    field_type = models.CharField(max_length=20, choices=FIELD_TYPE_CHOICES)
-    applies_to = models.CharField(max_length=20, choices=APPLIES_TO_CHOICES)
-    created_at = models.DateTimeField(auto_now_add=True)
+# class CustomFieldDefinition(models.Model):
+#     name       = models.CharField(max_length=100, unique=True)
+#     field_type = models.CharField(max_length=20, choices=FIELD_TYPE_CHOICES)
+#     applies_to = models.CharField(max_length=20, choices=APPLIES_TO_CHOICES)
+#     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.name} ({self.get_field_type_display()})"
+#     def __str__(self):
+#         return f"{self.name} ({self.get_field_type_display()})"
 
-class ClientCustomFieldValue(models.Model):
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    field  = models.ForeignKey(CustomFieldDefinition, on_delete=models.CASCADE)
-    value  = models.TextField()
+# class ClientCustomFieldValue(models.Model):
+#     client = models.ForeignKey(Client, on_delete=models.CASCADE)
+#     field  = models.ForeignKey(CustomFieldDefinition, on_delete=models.CASCADE)
+#     value  = models.TextField()
 
 # This file defines the models for the CRM application, including
 # the Client model with custom fields, and the CustomFieldDefinition

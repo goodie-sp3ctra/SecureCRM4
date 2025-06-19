@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Custom Field Definitions</h2>
+<a href="{% url 'customers:fielddef_add' %}" class="btn btn-primary mb-3">Add new field</a>
+<table class="table">
+    <thead><tr><th>Name</th><th>Type</th><th>Applies To</th><th></th></tr></thead>
+    <tbody>
+        {% for defn in definitions %}
+        <tr>
+            <td>{{ defn.name }}</td>
+            <td>{{ defn.get_field_type_display }}</td>
+            <td>{{ defn.get_applies_to_display }}</td>
+            <td>
+                <a href="{% url 'customers:fielddef_edit' defn.pk %}" class="btn btn-sm btn-secondary">Edit</a>
+                <a href="{% url 'customers:fielddef_delete' defn.pk %}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">No custom fields defined.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

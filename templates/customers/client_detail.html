@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ object.company_name }}</h1>
+<p><strong>Contact:</strong> {{ object.contact_name }}</p>
+<h3>Custom Fields</h3>
+<ul>
+    {% for k,v in object.custom_fields.items %}
+    <li><strong>{{ k }}:</strong> {{ v }}</li>
+    {% empty %}
+    <li>(no custom data)</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'customers:edit' object.pk %}" class="btn btn-primary">Edit</a>
+<a href="{% url 'customers:list' %}" class="btn btn-link">Back to list</a>
+{% endblock %}

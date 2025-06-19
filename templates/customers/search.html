@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Search Results</h1>
+
+  <form method="get" action="{% url 'customers:search' %}" class="mb-3">
+    <div class="input-group">
+      <input
+        type="text"
+        name="q"
+        value="{{ query }}"
+        placeholder="Search by company name…"
+        class="form-control"
+      >
+      <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+  </form>
+
+  {% if clients %}
+    <ul class="list-group">
+      {% for client in clients %}
+        <li class="list-group-item">
+          <a href="{% url 'customers:detail' client.pk %}">{{ client.company_name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No customers found for “{{ query }}”.</p>
+  {% endif %}
+{% endblock %}
+

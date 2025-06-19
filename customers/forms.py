@@ -43,7 +43,23 @@ class ClientForm(forms.ModelForm):
           'status',
         ]
 
-
         widgets = {
-          'status': forms.Select(choices=Client.STATUS_CHOICES),
-        }
+            "status": forms.Select(choices=Client.STATUS_CHOICES, attrs={"class": "form-control"}),
+            "custom_fields": forms.Textarea(attrs={
+                "class": "form-control",
+                "rows": 5,
+                "placeholder": '{"key1":"value1","key2":"value2"}',
+            }),
+            }
+
+# customers/forms.py
+
+# class CustomFieldDefinitionForm(forms.ModelForm):
+#     class Meta:
+#         model  = CustomFieldDefinition
+#         fields = ["name", "field_type", "applies_to"]
+#         widgets = {
+#             "name":       forms.TextInput(attrs={"class":"form-control"}),
+#             "field_type": forms.Select(attrs={"class":"form-control"}),
+#             "applies_to": forms.Select(attrs={"class":"form-control"}),
+#         }
