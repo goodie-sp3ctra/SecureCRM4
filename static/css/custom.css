@@ -1,0 +1,78 @@
+/* static/css/custom.css */
+
+/* Increase the base font size across the app */
+body {
+    font-size: 1.1rem; /* ~18px */
+}
+
+/* Headings a bit larger & heavier */
+h1 {
+    font-size: 2.5rem; /* ~40px */
+}
+
+h2 {
+    font-size: 2rem; /* ~32px */
+}
+
+h3 {
+    font-size: 1.75rem; /* ~28px */
+}
+
+/* Sidebar brand/logo */
+#sidebar .brand a {
+    font-size: 1.75rem; /* ~28px */
+    font-weight: 700;
+    text-decoration: none;
+}
+
+#sidebar.collapsed .brand a {
+    font-size: 1.5rem; /* slightly smaller when collapsed */
+}
+
+/* Sidebar links */
+#sidebar .nav-link {
+    font-size: 1.15rem; /* ~18px */
+    padding-left: 1.25rem;
+}
+
+#sidebar.collapsed .nav-link {
+    text-align: center;
+    padding: .75rem 0;
+}
+
+/* Cards on the home page */
+.card {
+    border-radius: .75rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+    .card h5 {
+        font-size: 1.3rem; /* slightly larger card titles */
+    }
+
+    .card p {
+        font-size: 1rem; /* body copy remains readable */
+    }
+
+/* Buttons */
+.btn {
+    font-size: 1.05rem;
+    padding: .6rem 1.2rem;
+}
+
+/* Navbar brand */
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Footer text a touch bigger */
+footer {
+    font-size: .95rem;
+}
+
+/* Ensure the clickable SecureCOMM always has pointer cursor */
+#sidebar .brand a {
+    cursor: pointer;
+}
+

@@ -1,7 +1,6 @@
 from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.views.generic import ListView, DetailView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect
@@ -9,7 +8,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth.hashers import make_password
 from django import forms
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from .models import Client
 from .forms import ClientForm
 import re
@@ -110,25 +109,26 @@ def user_logout(request):
 
 # Customer List View
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
+
 class ClientListView(ListView):
     model = Client
-    template_name = 'customers/client_list.html'
-    context_object_name = 'client'
-    paginate_by = 10
+    template_name = "customers/client_list.html"
+    paginate_by = 25
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        page = self.request.GET.get('page')
-        customers = Paginator(self.get_queryset(), self.paginate_by).get_page(page)
-        context['customers'] = customers
-        return context
+    def get_queryset(self):
+        qs = super().get_queryset()
+        # Simple JSONB filter: ?field=Industry&value=Manufacturing
+        key   = self.request.GET.get("field")
+        value = self.request.GET.get("value")
+        if key and value:
+            qs = qs.filter(**{f"custom_fields__{key}": value})
+        return qs
 
 # Customer Detail View
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
-class ClientDetail(DetailView):
+class ClientDetailView(DetailView):
     model = Client
-    template_name = 'customers/client_detail.html'
-    context_object_name = 'client'
+    template_name = "customers/client_detail.html"
 
 # Search Customer View
 @login_required(login_url='/login/')
@@ -151,21 +151,16 @@ def account_details(request):
 def root_redirect(request):
     return redirect('login')
 
-from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView
-from .models import Client
-from .forms import ClientForm
-
 class ClientList(ListView):
     model = Client
     template_name = 'customers/client_list.html'
     context_object_name = 'clients'
 
-class ClientCreate(CreateView):
-    model = Client
-    form_class = ClientForm
-    template_name = 'customers/add_client.html'
-    success_url = reverse_lazy('customers:list')
+class ClientCreateView(CreateView):
+    model       = Client
+    form_class  = ClientForm
+    template_name = "customers/client_form.html"
+    success_url = reverse_lazy("customers:list")
 
 class ClientForm(forms.ModelForm):
     class Meta:
@@ -174,4 +169,42 @@ class ClientForm(forms.ModelForm):
         widgets = {
             'status': forms.Select(choices=Client.STATUS_CHOICES),
         }
+
+class ClientUpdateView(UpdateView):
+    model       = Client
+    form_class  = ClientForm
+    template_name = "customers/client_form.html"
+    success_url = reverse_lazy("customers:list")
+
+# customers/views.py
+from django.views.generic import ListView
+from .models import Client
+
+class CustomerSearchView(ListView):
+    model = Client
+    template_name = "customers/search.html"    # your search template
+    context_object_name = "clients"            # in the template you'll loop over `clients`
+
+    def get_queryset(self):
+        # grab the “q” parameter (e.g. /search/?q=Acme)
+        q = self.request.GET.get("q", "").strip()
+        if q:
+            # filter on company_name or contact_name (you can add more fields)
+            return Client.objects.filter(
+                company_name__icontains=q
+            )
+        # no query => empty qs
+        return Client.objects.none()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["query"] = self.request.GET.get("q", "")
+        return ctx
+
+# customers/views.py
+from django.views.generic import TemplateView
+
+class HomeView(TemplateView):
+    template_name = "home.html"
+
 

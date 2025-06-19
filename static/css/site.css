@@ -1,0 +1,85 @@
+/* --------------- Base typography --------------- */
+body {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.15rem; /* ~18px */
+    transition: margin-left .3s ease;
+}
+
+/* Headings */
+h1 {
+    font-size: 2.5rem; /* ~40px */
+}
+
+h2 {
+    font-size: 2rem; /* ~32px */
+}
+
+h3 {
+    font-size: 1.75rem; /* ~28px */
+}
+
+/* --------------- Sidebar --------------- */
+#sidebar {
+    width: 250px;
+    transition: width .3s ease;
+}
+
+    #sidebar.collapsed {
+        width: 3.5rem;
+    }
+
+    #sidebar .navbar-brand {
+        font-size: 1.75rem; /* ~28px */
+    }
+
+    #sidebar.collapsed .navbar-brand {
+        font-size: 1.5rem;
+    }
+
+    #sidebar .nav-link {
+        padding-left: 1.25rem;
+        font-size: 1.15rem;
+    }
+
+    #sidebar.collapsed .nav-link {
+        padding: .75rem 0;
+        text-align: center;
+    }
+
+/* push main content over when sidebar expanded/collapsed */
+#mainContent {
+    margin-left: 250px;
+}
+
+    #mainContent.collapsed {
+        margin-left: 3.5rem;
+    }
+
+/* --------------- Cards & Buttons --------------- */
+.card {
+    border-radius: .75rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+    .card h5 {
+        font-size: 1.3rem;
+    }
+
+    .card p {
+        font-size: 1rem;
+    }
+
+.btn {
+    font-size: 1.05rem;
+    padding: .6rem 1.2rem;
+}
+
+/* --------------- Footer --------------- */
+footer {
+    font-size: .95rem;
+}
+
+/* --------------- Utility --------------- */
+.navbar-brand {
+    font-weight: 600 !important;
+}

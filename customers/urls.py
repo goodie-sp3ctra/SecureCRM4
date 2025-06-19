@@ -1,13 +1,21 @@
 ﻿# customers/urls.py
 from django.urls import path
-from .views import ClientListView, ClientDetail, add_customer, search_customer
+from . import views
+from .views import (
+    ClientListView, ClientDetailView,
+    ClientCreateView, ClientUpdateView
+)
 
 app_name = 'customers'   # ← this enables the namespace
 
 urlpatterns = [
-    path('',        ClientListView.as_view(), name='list'),    # customers:list
-    path('add/',    add_customer,            name='add'),      # customers:add
-    path('search/', search_customer,         name='search'),   # customers:search
-    path('<int:pk>/', ClientDetail.as_view(), name='detail'),  # customers:detail
+    path('',                ClientListView.as_view(), name='list'), 
+    path("add/",            ClientCreateView.as_view(), name="add"),
+    path("<int:pk>/",       ClientDetailView.as_view(), name="detail"),
+    path("<int:pk>/edit/",  ClientUpdateView.as_view(), name="edit"),
+    path('',                views.home,            name='home'),
+    path('add/',            views.add_customer,    name='add'),
+    path('search/', views.CustomerSearchView.as_view(), name='search'),
 ]
+
 
