@@ -3,9 +3,12 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="text-center mt-5">
-    <h1 style="color: #007bff; font-size: 3rem;">My Connect</h1>
-    <h4 class="mt-2">Dashboard</h4>
+<div class="pipeline-board d-flex gap-3">
+    {% for col in columns %}
+    <div class="pipeline-column flex-fill">
+        <div class="column-header bg-light p-2 text-center">
+            {{ col.label }}
+            <span class="badge bg-secondary">{{ col.jobs|length }}</span>
 </div>
 
 <!-- Buttons -->
