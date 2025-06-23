@@ -24,13 +24,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Your app
+    'apps.website',
+    'apps.accounts',
+    'apps.dashboard',
+    'apps.customers',
+
     # 3rd-party apps
     'rest_framework',
     'corsheaders',
     'widget_tweaks',  # ✅ Added here
-
-    # Your app
-    'customers',
 ]
 
 # Middleware configuration
@@ -100,17 +103,18 @@ REST_FRAMEWORK = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Authentication settings
-LOGIN_URL = '/login/'  # Redirects here if the user is not authenticated
-LOGIN_REDIRECT_URL = '/'  # Redirect to homepage after login
+LOGIN_URL = '/accounts/login/'    # when you call @login_required, send folks here
+LOGIN_REDIRECT_URL = '/home/'     # after a successful login, send them here
+LOGOUT_REDIRECT_URL = 'accounts:login'
 
 # Email settings for using Gmail SMTP server
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Gmail SMTP server
 EMAIL_PORT = 587  # SMTP port for TLS
 EMAIL_USE_TLS = True  # Use TLS encryption
-EMAIL_HOST_USER = 'your-email@gmail.com'  # Your Gmail address (replace with your email)
-EMAIL_HOST_PASSWORD = 'your-app-password'  # Your Gmail app-specific password
-DEFAULT_FROM_EMAIL = 'your-email@gmail.com'  # Default sender email (replace with your email)
+EMAIL_HOST_USER = 'goodiematthews@gmail.com'  # Your Gmail address (replace with your email)
+EMAIL_HOST_PASSWORD = 'MarmalaideSandwich'  # Your Gmail app-specific password
+DEFAULT_FROM_EMAIL = 'goodiematthews@gmail.com'  # Default sender email (replace with your email)
 
 # For development, print email content to the console instead of sending it (uncomment for testing)
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Uncomment for testing

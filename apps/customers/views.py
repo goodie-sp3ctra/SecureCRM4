@@ -1,35 +1,52 @@
+# apps/customers/views.py
+
+# from django.db import IntegrityError
+# from django.contrib.auth.decorators import login_required
+# from django.utils.decorators import method_decorator
+# from django.shortcuts import render, redirect
+# from django.contrib.auth.hashers import make_password
+# from django.contrib.auth.hashers import is_strong_password
+# from django.urls import reverse_lazy
+# from django.views.generic import ListView, CreateView, DetailView, UpdateView
+# from .models import Client
+# from .forms import ClientForm
+# import re
+# from django.views.generic import TemplateView
+# from .models import Job, Client
+# from .models import Client
+# from django.shortcuts import render, redirect
+# from django.shortcuts import render
+
+from dataclasses import field
+import re
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.db import IntegrityError
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.shortcuts import render, redirect
-from django.core.paginator import Paginator
-from django.contrib.auth.hashers import make_password
-from django import forms
-from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView, UpdateView
-from .models import Client
+from django.views.generic import (
+    ListView, DetailView, CreateView, UpdateView
+)
+from .models import Client, Job
 from .forms import ClientForm
-from django.contrib.auth.views import LoginView
-import re
+from django import forms
 
-from .models import Client
-
-# Password strength validator
-def is_strong_password(password):
-    return (
-        len(password) >= 8 and
-        re.search(r'[A-Z]', password) and
-        re.search(r'[a-z]', password) and
-        re.search(r'[0-9]', password) and
-        re.search(r'[!@#$%^&*(),.?":{}|<>]', password)
-    )
-
-# Home view
-@login_required(login_url='/login/')
-def home(request):
-    return render(request, 'home.html')
+def is_strong_password(password: str) -> bool:
+    """
+    At least 8 chars, one uppercase, one lowercase, one digit, one symbol.
+    """
+    if len(password) < 8:
+        return False
+    if not re.search(r'[A-Z]', password):
+        return False
+    if not re.search(r'[a-z]', password):
+        return False
+    if not re.search(r'\d', password):
+        return False
+    if not re.search(r'[\W_]', password):
+        return False
+    return True
 
 # Add Customer view
 @login_required(login_url='/login/')
@@ -74,42 +91,21 @@ def add_customer(request):
                 'error': 'Something went wrong while saving the customer. Please try again.'
             })
 
-    return render(request, 'customers/add_customer.html')
+    return render(request, 'customers/customers/add_customer.html')
 
-# Register view
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('home')
-        return render(request, 'registration/register.html', {'form': form})
-    else:
-        form = UserCreationForm()
-    return render(request, 'registration/register.html', {'form': form})
 
-# Login view
-def user_login(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('home')
-        return render(request, 'registration/login.html', {'form': form})
 
-    form = AuthenticationForm()
-    return render(request, 'registration/login.html', {'form': form})
-
-# Logout view
-@login_required(login_url='/login/')
-def user_logout(request):
-    logout(request)
-    return redirect('login')
+@login_required(login_url="accounts:login")
+def search_customer(request):
+    q = request.GET.get("q", "").strip()
+    qs = Client.objects.filter(company_name__icontains=q) if q else Client.objects.none()
+    return render(request, "customers/search_customer.html", {
+        "customers": qs,
+        "query": q
+    })
 
 # Customer List View
-@method_decorator(login_required(login_url='/login/'), name='dispatch')
+@method_decorator(login_required(login_url="accounts:login"), name="dispatch")
 
 class ClientListView(ListView):
     model = Client
@@ -122,7 +118,7 @@ class ClientListView(ListView):
         key   = self.request.GET.get("field")
         value = self.request.GET.get("value")
         if key and value:
-            qs = qs.filter(**{f"custom_fields__{key}": value})
+            qs = qs.filter(**{f"custom_fields__{field}": value})
         return qs
 
 # Customer Detail View
@@ -138,24 +134,9 @@ def search_customer(request):
     customers = Client.objects.filter(name__icontains=query) if query else Client.objects.all()
     return render(request, 'customers/search_customer.html', {'customers': customers, 'query': query})
 
-# Dashboard View
-@login_required(login_url='/login/')
-def dashboard(request):
-    return render(request, 'dashboard.html')
-
-# Account Details View
-@login_required(login_url='/login/')
-def account_details(request):
-    return render(request, 'account_details.html')
-
 # Root redirect to login
 def root_redirect(request):
     return redirect('login')
-
-class ClientList(ListView):
-    model = Client
-    template_name = 'customers/client_list.html'
-    context_object_name = 'clients'
 
 class ClientCreateView(CreateView):
     model       = Client
@@ -176,10 +157,6 @@ class ClientUpdateView(UpdateView):
     form_class  = ClientForm
     template_name = "customers/client_form.html"
     success_url = reverse_lazy("customers:list")
-
-# customers/views.py
-from django.views.generic import ListView
-from .models import Client
 
 class CustomerSearchView(ListView):
     model = Client
@@ -202,46 +179,11 @@ class CustomerSearchView(ListView):
         ctx["query"] = self.request.GET.get("q", "")
         return ctx
 
-# customers/views.py
-from django.views.generic import TemplateView
+class JobListView(ListView):
+    model = Job
+    template_name = "customers/job_list.html"   # you’ll create this
 
-class HomeView(TemplateView):
-    template_name = "home.html"
-
-class UserLoginView(LoginView):
-    template_name = "registration/login.html"
-    redirect_authenticated_user = True
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx["admin_login"] = False
-        return ctx
-
-    def get_success_url(self):
-        # where regular users go after login
-        return self.get_redirect_url() or reverse_lazy("home")
-
-
-class AdminLoginView(LoginView):
-    template_name = "registration/login.html"
-    redirect_field_name = "next"
-    redirect_authenticated_user = True
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx["admin_login"] = True
-        return ctx
-
-    def form_valid(self, form):
-        user = form.get_user()
-        if not user.is_staff:
-            form.add_error(None, "You must be an admin to log in here.")
-            return self.form_invalid(form)
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        # where staff go after login; you could change to your admin dashboard URL
-        return self.get_redirect_url() or reverse_lazy("admin:index")
-
-
-
+class JobDetailView(DetailView):
+    model = Job
+    template_name = "customers/job_detail.html" # and this
+    context_object_name = "job"
