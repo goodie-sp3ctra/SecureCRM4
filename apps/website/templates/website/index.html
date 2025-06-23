@@ -1,0 +1,13 @@
+<!-- website/templates/website/index.html -->
+{% extends 'website/base.html' %}
+{% block content %}
+<section style="padding: 2em; text-align: center;">
+    <h1>Welcome to SecureCRM</h1>
+    <p>Manage your customers efficiently and easily with our secure CRM platform.</p>
+    {% if not user.is_authenticated %}
+    <p><a href="{% url 'accounts:login' %}" style="font-weight: bold;">Login</a> to get started.</p>
+    {% else %}
+    <p><a href="{% url 'dashboard:dashboard_home' %}">Go to your Dashboard</a></p>
+    {% endif %}
+</section>
+{% endblock %}

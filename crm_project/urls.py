@@ -1,33 +1,28 @@
 # crm_project/urls.py
 from django.contrib import admin
 from django.urls import path, include
-from customers import views as customer_views
-from customers.views import HomeView
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
+urlpatterns =[
 
-    # your home / auth / dashboard / account-details
-    # path('',          customer_views.home,            name='home'),
-    path("customers/", include(("customers.urls", "customers"), namespace="customers")),
-    path('login/',    customer_views.user_login,      name='login'),
-    path('logout/',   customer_views.user_logout,     name='logout'),
-    path('register/', customer_views.register,        name='register'),
+    path("admin/", admin.site.urls),
 
-        path("", HomeView.as_view(template_name="home.html"), name="home"),
-    path("customers/", include(("customers.urls", "customers"), namespace="customers")),
-
-    path('dashboard/',       customer_views.dashboard,        name='dashboard'),
-    path('account_details/', customer_views.account_details, name='account_details'),
-
-    # mount the customers app, with namespace="customers"
     path(
-        'customers/',
-        include(
-            ('customers.urls', 'customers.urls'),   # <-- (module, app_name)
-            namespace='customers'
-        )
+        '', 
+        include(('apps.website.urls', 'website'), namespace='website')
     ),
+
+    path("dashboard/",include(("apps.dashboard.urls","dashboard"), namespace="dashboard")),
+
+    # point at apps.customers, not customers
+    path('customers/', include( ('apps.customers.urls', 'customers'), namespace='customers')
+    ),
+
+    path(
+        "accounts/",
+        include(
+            ("apps.accounts.urls", "accounts"),  # module, app_name
+            namespace="accounts"                 # then you can {% url 'accounts:login' %}
+        ),
+    ),
+
 ]
-
-

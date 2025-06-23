@@ -1,0 +1,141 @@
+﻿{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}
+  {% if object %}Edit{% else %}Add{% endif %} Client
+{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'customers:list' %}">Clients</a></li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {% if object %}Edit{% else %}Add{% endif %} Client
+        </li>
+    </ol>
+</nav>
+
+<div class="card mx-auto" style="max-width: 700px;">
+    <div class="card-body">
+        <h2 class="card-title mb-4">{% if object %}Edit{% else %}Add{% endif %} Client</h2>
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="row gx-3">
+                <!-- Company Name -->
+                <div class="col-md-6 mb-3">
+                    <label for="id_company_name" class="form-label">
+                        Company Name <span class="text-danger">*</span>
+                    </label>
+                    <input type="text"
+                           name="company_name"
+                           value="{{ form.company_name.value|default_if_none:'' }}"
+                           class="form-control{% if form.company_name.errors %} is-invalid{% endif %}"
+                           id="id_company_name"
+                           autofocus
+                           required>
+                    {% if form.company_name.errors %}
+                    <div class="invalid-feedback">
+                        {{ form.company_name.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Contact Name -->
+                <div class="col-md-6 mb-3">
+                    <label for="id_contact_name" class="form-label">
+                        Contact Name <span class="text-danger">*</span>
+                    </label>
+                    <input type="text"
+                           name="contact_name"
+                           value="{{ form.contact_name.value|default_if_none:'' }}"
+                           class="form-control{% if form.contact_name.errors %} is-invalid{% endif %}"
+                           id="id_contact_name"
+                           required>
+                    {% if form.contact_name.errors %}
+                    <div class="invalid-feedback">
+                        {{ form.contact_name.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row gx-3">
+                <!-- Email -->
+                <div class="col-md-6 mb-3">
+                    <label for="id_contact_email" class="form-label">
+                        Contact Email <span class="text-danger">*</span>
+                    </label>
+                    <input type="email"
+                           name="contact_email"
+                           value="{{ form.contact_email.value|default_if_none:'' }}"
+                           class="form-control{% if form.contact_email.errors %} is-invalid{% endif %}"
+                           id="id_contact_email"
+                           placeholder="you@example.com"
+                           required>
+                    {% if form.contact_email.errors %}
+                    <div class="invalid-feedback">
+                        {{ form.contact_email.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Phone -->
+                <div class="col-md-6 mb-3">
+                    <label for="id_phone" class="form-label">Phone</label>
+                    <input type="tel"
+                           name="phone"
+                           value="{{ form.phone.value|default_if_none:'' }}"
+                           class="form-control{% if form.phone.errors %} is-invalid{% endif %}"
+                           id="id_phone"
+                           placeholder="+1 (555) 123-4567">
+                    {% if form.phone.errors %}
+                    <div class="invalid-feedback">
+                        {{ form.phone.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Address (full width) -->
+            <div class="mb-3">
+                <label for="id_address" class="form-label">Address</label>
+                <textarea name="address"
+                          class="form-control{% if form.address.errors %} is-invalid{% endif %}"
+                          id="id_address"
+                          rows="4">{{ form.address.value|default_if_none:'' }}</textarea>
+                {% if form.address.errors %}
+                <div class="invalid-feedback">
+                    {{ form.address.errors.0 }}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Status (full width) -->
+            {% load widget_tweaks %}
+
+            <div class="mb-4">
+                <label for="id_status" class="form-label">
+                    Status <span class="text-danger">*</span>
+                </label>
+                {{ form.status|add_class:"form-select"|attr:"required:id=id_status" }}
+                {% if form.status.errors %}
+                <div class="invalid-feedback">
+                    {{ form.status.errors.0 }}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-success">
+                    {% if object %}Update{% else %}Save{% endif %}
+                </button>
+                <a href="{% url 'customers:list' %}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -70,27 +70,47 @@ class Client(models.Model):
             # gin index for fast lookups on JSONB keys
             GinIndex(fields=['custom_fields']),
         ]
-# class CustomFieldDefinition(models.Model):
-#     name       = models.CharField(max_length=100, unique=True)
-#     field_type = models.CharField(max_length=20, choices=FIELD_TYPE_CHOICES)
-#     applies_to = models.CharField(max_length=20, choices=APPLIES_TO_CHOICES)
-#     created_at = models.DateTimeField(auto_now_add=True)
 
-#     def __str__(self):
-#         return f"{self.name} ({self.get_field_type_display()})"
+class Job(models.Model):
+    STATUS_NEW        = "NEW"
+    STATUS_OPEN       = "OPEN"
+    STATUS_IN_PROGRESS= "IN_PROGRESS"
+    STATUS_CLOSED     = "CLOSED"
+    STATUS_CANCELED   = "CANCELED"
+    STATUS_ON_HOLD    = "ON_HOLD"
 
-# class ClientCustomFieldValue(models.Model):
-#     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-#     field  = models.ForeignKey(CustomFieldDefinition, on_delete=models.CASCADE)
-#     value  = models.TextField()
+    STATUS_CHOICES = [
+        (STATUS_NEW,         "New"),
+        (STATUS_OPEN,        "Open"),
+        (STATUS_IN_PROGRESS, "In Progress"),
+        (STATUS_CLOSED,      "Closed"),
+        (STATUS_CANCELED,    "Canceled"),
+        (STATUS_ON_HOLD,     "On Hold"),
+    ]
 
-# This file defines the models for the CRM application, including
-# the Client model with custom fields, and the CustomFieldDefinition
-# and ClientCustomFieldValue models for managing those fields.
-# It also includes a stub validator for phone numbers that Django migrations
-# need to import, even if you don't use it anymore.
-# This is necessary to ensure that the migrations can run without errors
-# if the phone number field is not used in the application.
-# This file defines the models for the CRM application, including
-# the Client model with custom fields, and the CustomFieldDefinition
-# and ClientCustomFieldValue models for managing those fields.
+    client       = models.ForeignKey(
+                       'customers.Client',
+                       on_delete=models.CASCADE,
+                       related_name='jobs'
+                   )
+    job_number   = models.CharField(max_length=20, unique=True, blank=True)
+    title        = models.CharField("Job Title", max_length=255)
+    description  = models.TextField("Description", blank=True)
+    status       = models.CharField(
+                       max_length=15,
+                       choices=STATUS_CHOICES,
+                       default=STATUS_NEW
+                   )
+    schedule_date= models.DateField(null=True, blank=True)
+    created_at   = models.DateTimeField(auto_now_add=True)
+    updated_at   = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['status']),
+            models.Index(fields=['created_at']),
+        ]
+
+    def __str__(self):
+        return f"{self.job_number or self.id} | {self.title}"

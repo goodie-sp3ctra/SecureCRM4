@@ -269,4 +269,29 @@ footer.page-footer {
     padding: 1rem;
 }
 
+.pipeline-board {
+    overflow-x: auto;
+    padding-bottom: 1rem;
+}
 
+.pipeline-column {
+    min-width: 16rem;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--grey-300);
+    border-radius: .5rem;
+    background: white;
+}
+
+.column-header {
+    font-weight: 600;
+}
+
+.column-cards {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.pipeline-column .card {
+    cursor: grab;
+}
