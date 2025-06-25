@@ -24,5 +24,5 @@ urlpatterns =[
             namespace="accounts"                 # then you can {% url 'accounts:login' %}
         ),
     ),
-
+    path("jobs/", include(("apps.jobs.urls", "jobs"), namespace="jobs")),
 ]

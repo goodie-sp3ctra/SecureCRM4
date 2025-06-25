@@ -29,6 +29,8 @@ INSTALLED_APPS = [
     'apps.accounts',
     'apps.dashboard',
     'apps.customers',
+    'apps.activity.apps.ActivityConfig',
+    'apps.jobs',
 
     # 3rd-party apps
     'rest_framework',

@@ -1,0 +1,50 @@
+﻿{% extends "website/base.html" %}
+{% load static %}
+{% block content %}
+<h1>Deal Pipeline</h1>
+<div class="row">
+    {% for col in stages %}
+    <div class="col">
+        <div class="card mb-3">
+            <div class="card-header">{{ col.label }}</div>
+            <ul class="list-group kanban-column" data-stage="{{ col.key }}">
+                {% for job in col.jobs %}
+                <li class="list-group-item kanban-card" data-id="{{ job.id }}">
+                    {{ job.title }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script>
+  // Initialize one Sortable per column
+  document.querySelectorAll('.kanban-column').forEach(column => {
+    new Sortable(column, {
+      group: 'jobs',
+      animation: 150,
+      onEnd: evt => {
+        const jobId = evt.item.dataset.id;
+        const newStage = evt.to.dataset.stage;
+        fetch("{% url 'jobs:kanban_update' %}", {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: new URLSearchParams({
+            job_id: jobId,
+            new_stage: newStage
+          })
+        })
+        .then(r => r.json())
+        .then(data => {
+          if (!data.ok) alert("Could not update status");
+        });
+      }
+    });
+  });
+</script>
+{% endblock %}
