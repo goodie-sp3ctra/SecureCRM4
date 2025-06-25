@@ -41,6 +41,7 @@
             <li class="nav-item"><a class="nav-link" href="{% url 'customers:list' %}">Clients</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'customers:search' %}">Search Clients</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'jobs:kanban' %}">Prospects</a></li>
+
         </ul>
     </nav>
     {% endif %}
@@ -60,6 +61,21 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'website:pricing' %}">Pricing</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'website:contact' %}">Contact</a></li>
                     </ul>
+                <!-- BRAND (Home) -->
+                <a class="navbar-brand fw-bold" href="{% url 'website:home' %}">SecureCOMM</a>
+                <a class="nav-link mx-2" href="{% url 'website:home' %}">Home</a>
+                <a class="nav-link mx-2" href="{% url 'website:about' %}">About</a>
+                <a class="nav-link mx-2" href="{% url 'website:pricing' %}">Pricing</a>
+                <a class="nav-link mx-2" href="{% url 'website:contact' %}">Contact</a>
+                {% if user.is_authenticated %}
+                <!-- If logged in: show Dashboard and Logout -->
+                <a class="nav-link mx-2" href="{% url 'dashboard:home' %}">Dashboard</a>
+                <a class="nav-link mx-2" href="{% url 'accounts:logout' %}">Logout</a>
+                <a class="nav-link mx-2" href="{% url 'accounts:login' %}">Login</a>
+                {% else %}
+                {% endif %}
+                <!-- LOGIN/LOGOUT -->
+                <div class="collapse navbar-collapse justify-content-end">
                     <ul class="navbar-nav">
                         {% if user.is_authenticated %}
                         <li class="nav-item">
@@ -68,6 +84,7 @@
                         {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+                            <a class="nav-link text-primary" href="{% url 'accounts:login' %}">Login</a>
                         </li>
                         {% endif %}
                     </ul>
