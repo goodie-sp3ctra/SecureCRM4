@@ -28,7 +28,7 @@
 </head>
 
 <body class="d-flex align-items-stretch min-vh-100">
-
+    {% if user.is_authenticated %}
     <!-- SIDEBAR -->
     <!-- COLLAPSIBLE SIDEBAR -->
     <nav id="sidebar" class="sidebar collapsed d-flex flex-column">
@@ -40,9 +40,11 @@
             <li class="nav-item"><a class="nav-link" href="{% url 'customers:add' %}">Add Clients</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'customers:list' %}">Clients</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'customers:search' %}">Search Clients</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'jobs:kanban' %}">Prospects</a></li>
         </ul>
     </nav>
-
+        </ul>
+    </nav>
     <!-- /SIDEBAR -->
     <!-- MAIN PANEL -->
     <div id="mainContent" class="main-panel flex-fill collapsed">

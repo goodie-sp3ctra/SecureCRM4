@@ -1,0 +1,49 @@
+﻿{# apps/activity/templates/activity/timeline.html #}
+{% extends "website/base.html" %}
+{% block content %}
+<div class="container py-4">
+    <h2>Activity for {{ client.company_name }}</h2>
+    <ul id="timeline" class="list-unstyled">
+        {% for act in activities %}
+        <li class="mb-3">
+            <small class="text-muted">{{ act.timestamp|date:"Y-m-d H:i" }}</small><br>
+            <strong class="ms-2">{{ act.get_event_type_display }}</strong><br>
+            <span class="ms-4">{{ act.note }}</span>
+        </li>
+        {% empty %}
+        <li>No activity yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<script>
+    (function(){
+      // grab the client's PK from template context:
+      const clientId = "{{ client.pk }}";
+      const timelineEl = document.getElementById("timeline");
+
+      // choose ws vs wss and build URL
+      const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+      const socketUrl = `${protocol}://${window.location.host}/ws/activity/${clientId}/`;
+
+      // open the socket
+      const ws = new WebSocket(socketUrl);
+
+      // when a new activity comes in, prepend it to your <ul>
+      ws.addEventListener("message", (evt) => {
+        const msg = JSON.parse(evt.data);
+        const li = document.createElement("li");
+        li.className = "mb-3";
+
+        li.innerHTML = `
+          <small class="text-muted">${msg.data.timestamp}</small><br>
+          <strong class="ms-2">${msg.data.event}</strong><br>
+          <span class="ms-4">${msg.data.note}</span>
+        `;
+
+        // stick it on top
+        timelineEl.insertBefore(li, timelineEl.firstChild);
+      });
+    })();
+</script>
+{% endblock %}

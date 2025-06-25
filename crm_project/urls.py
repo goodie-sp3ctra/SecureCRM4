@@ -11,6 +11,10 @@ urlpatterns =[
         include(('apps.website.urls', 'website'), namespace='website')
     ),
 
+
+    path("dashboard/",include(("apps.dashboard.urls","dashboard"), namespace="dashboard")),
+
+
     path("dashboard/",include(("apps.dashboard.urls","dashboard"), namespace="dashboard")),
 
     # point at apps.customers, not customers
@@ -24,5 +28,7 @@ urlpatterns =[
             namespace="accounts"                 # then you can {% url 'accounts:login' %}
         ),
     ),
+
+    path("jobs/", include(("apps.jobs.urls", "jobs"), namespace="jobs")),
 
 ]
