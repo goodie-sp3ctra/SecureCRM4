@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_beat',
 
     # Your app
     'apps.website',
@@ -31,6 +32,8 @@ INSTALLED_APPS = [
     'apps.customers',
     'apps.activity.apps.ActivityConfig',
     'apps.jobs',
+    'apps.tasks.apps.TasksConfig',
+    'apps.invoices',
 
     # 3rd-party apps
     'rest_framework',
@@ -110,13 +113,47 @@ LOGIN_REDIRECT_URL = '/home/'     # after a successful login, send them here
 LOGOUT_REDIRECT_URL = 'accounts:login'
 
 # Email settings for using Gmail SMTP server
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+import os
+from dotenv import load_dotenv          # pip install python-dotenv
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv (BASE_DIR / ".env", override=False)
+
+ENV = os.getenv("DJANGO_ENV", "development")
+
+# e-mail back-end
+if ENV == "production":
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+elif ENV == "staging":
+    EMAIL_BACKEND  = "django.core.mail.backends.filebased.EmailBackend"
+    EMAIL_FILE_PATH = BASE_DIR / "tmp_emails"
+else:                           # development
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 EMAIL_HOST = 'smtp.gmail.com'  # Gmail SMTP server
 EMAIL_PORT = 587  # SMTP port for TLS
 EMAIL_USE_TLS = True  # Use TLS encryption
 EMAIL_HOST_USER = 'goodiematthews@gmail.com'  # Your Gmail address (replace with your email)
 EMAIL_HOST_PASSWORD = 'MarmalaideSandwich'  # Your Gmail app-specific password
 DEFAULT_FROM_EMAIL = 'goodiematthews@gmail.com'  # Default sender email (replace with your email)
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/1'
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    "send-reminders-every-minute": {
+        "task": "tasks.tasks.send_due_reminders",
+        "schedule": crontab(),        # every minute
+    },
+}
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env", override=False)
+
+ENV = os.getenv("DJANGO_ENV", "development")
 
 # For development, print email content to the console instead of sending it (uncomment for testing)
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Uncomment for testing

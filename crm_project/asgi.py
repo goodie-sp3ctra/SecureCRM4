@@ -18,6 +18,17 @@ application = ProtocolTypeRouter({
     # other protocols (http) fall through to Django’s default
 })
 
+from channels.routing import ProtocolTypeRouter, URLRouter
+from apps.tasks import routing as task_routing
+# … keep existing imports …
+
+application = ProtocolTypeRouter(
+    {
+        "websocket": URLRouter(task_routing.websocket_urlpatterns),
+        "http": get_asgi_application(),  # keep existing HTTP handler
+    }
+)
+
 import os
 
 from django.core.asgi import get_asgi_application
