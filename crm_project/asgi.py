@@ -15,8 +15,19 @@ application = ProtocolTypeRouter({
     "websocket": AuthMiddlewareStack(
         URLRouter(apps.activity.routing.websocket_urlpatterns)
     ),
-    # other protocols (http) fall through to Django�s default
+    # other protocols (http) fall through to Django’s default
 })
+
+from channels.routing import ProtocolTypeRouter, URLRouter
+from apps.tasks import routing as task_routing
+# … keep existing imports …
+
+application = ProtocolTypeRouter(
+    {
+        "websocket": URLRouter(task_routing.websocket_urlpatterns),
+        "http": get_asgi_application(),  # keep existing HTTP handler
+    }
+)
 
 import os
 
