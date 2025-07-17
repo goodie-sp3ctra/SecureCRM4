@@ -118,7 +118,7 @@ class ClientListView(ListView):
         key   = self.request.GET.get("field")
         value = self.request.GET.get("value")
         if key and value:
-            qs = qs.filter(**{f"custom_fields__{field}": value})
+            qs = qs.filter(**{f"custom_fields__{key}": value})
         return qs
 
 # Customer Detail View

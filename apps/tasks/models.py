@@ -4,8 +4,6 @@ from django.utils import timezone
 from apps.customers.models import Client
 from apps.jobs.models import Job
 
-
-
 class Task(models.Model):
     # Core
     title        = models.CharField(max_length=255)

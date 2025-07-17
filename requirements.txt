@@ -1,1 +1,100 @@
-asgiref==3.8.1 certifi==2025.4.26 charset-normalizer==3.4.2colorama==0.4.6 Django==5.2.1django-cors-headers==4.7.0django-extensions==4.1django-tailwind==4.0.1django-widget-tweaks==1.5.0djangorestframework==3.16.0docopt==0.6.2idna==3.10iniconfig==2.1.0packaging==25.0pillow==11.2.1pipreqs==0.4.13pluggy==1.5.0psycopg==3.2.9psycopg2-binary==2.9.10pytest==8.3.5requests==2.32.4sqlparse==0.5.3tzdata==2025.2urllib3==2.4.0yarg==0.1.10 
+
+asgiref==3.8.1 
+
+certifi==2025.4.26 
+
+charset-normalizer==3.4.2
+
+colorama==0.4.6
+ 
+Django==5.2.1
+
+django-cors-headers==4.7.0
+
+django-extensions==4.1
+
+django-tailwind==4.0.1
+
+django-widget-tweaks==1.5.0
+
+djangorestframework==3.16.0
+
+docopt==0.6.2
+
+idna==3.10
+
+iniconfig==2.1.0
+
+packaging==25.0
+
+pillow==11.2.1
+
+pipreqs==0.4.13
+
+pluggy==1.5.0
+
+psycopg==3.2.9
+
+psycopg2-binary==2.9.10
+
+pytest==8.3.5
+
+requests==2.32.4
+
+sqlparse==0.5.3
+
+tzdata==2025.2
+
+urllib3==2.4.0
+
+yarg==0.1.10 
+=======
+asgiref==3.8.1 
+
+certifi==2025.4.26 
+
+charset-normalizer==3.4.2
+
+colorama==0.4.6
+ 
+Django==5.2.1
+
+django-cors-headers==4.7.0
+
+django-extensions==4.1
+
+django-tailwind==4.0.1
+
+django-widget-tweaks==1.5.0
+
+djangorestframework==3.16.0
+
+docopt==0.6.2
+
+idna==3.10
+
+iniconfig==2.1.0
+
+packaging==25.0
+
+pillow==11.2.1
+
+pipreqs==0.4.13
+
+pluggy==1.5.0
+
+psycopg==3.2.9
+
+psycopg2-binary==2.9.10
+
+pytest==8.3.5
+
+requests==2.32.4
+
+sqlparse==0.5.3
+
+tzdata==2025.2
+
+urllib3==2.4.0
+
+yarg==0.1.10 

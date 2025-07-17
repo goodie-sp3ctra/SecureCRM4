@@ -61,6 +61,16 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'website:pricing' %}">Pricing</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'website:contact' %}">Contact</a></li>
                     </ul>
+                <!-- BRAND (Home) -->
+                <a class="navbar-brand fw-bold" href="{% url 'website:home' %}">SecureCOMM</a>
+                <!-- COLLAPSIBLE LINKS -->
+                <div class="collapse navbar-collapse justify-content-between">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'website:home' %}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'website:about' %}">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'website:pricing' %}">Pricing</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'website:contact' %}">Contact</a></li>
+                    </ul>
                     <ul class="navbar-nav">
                         {% if user.is_authenticated %}
                         <li class="nav-item">
@@ -69,6 +79,7 @@
                         {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+                            <a class="nav-link text-primary" href="{% url 'accounts:login' %}">Login</a>
                         </li>
                         {% endif %}
                     </ul>

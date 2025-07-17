@@ -35,7 +35,7 @@ def update_job_status(request):
 
 class JobListView(ListView):
     model = Job
-    template_name = "customers/job_list.html"   # you’ll create this
+    template_name = "customers/job_list.html"   # youï¿½ll create this
 
 class JobDetailView(DetailView):
     model = Job

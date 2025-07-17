@@ -1,8 +1,9 @@
 ﻿# apps/invoices/models.py
 from django.db import models
 from django.utils import timezone
-from apps.customers.models import Client          # existing app
+from apps.customers.models import Client
 from apps.jobs.models import Job
+
 
 
 class Invoice(models.Model):

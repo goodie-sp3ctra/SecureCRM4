@@ -33,3 +33,4 @@ def mark_paid(self, request, queryset):
 def resend_invoice(self, request, qs):
     for inv in qs:  inv.send_email()
     self.message_user(request, f"Queued {qs.count()} e-mails")
+    ordering        =   ("invoice_number",)
