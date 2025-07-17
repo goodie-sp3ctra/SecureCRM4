@@ -28,7 +28,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView
 )
-from .models import Client
+from .models import Client, Job
 from .forms import ClientForm
 from django import forms
 
@@ -178,3 +178,12 @@ class CustomerSearchView(ListView):
         ctx = super().get_context_data(**kwargs)
         ctx["query"] = self.request.GET.get("q", "")
         return ctx
+
+class JobListView(ListView):
+    model = Job
+    template_name = "customers/job_list.html"   # you’ll create this
+
+class JobDetailView(DetailView):
+    model = Job
+    template_name = "customers/job_detail.html" # and this
+    context_object_name = "job"

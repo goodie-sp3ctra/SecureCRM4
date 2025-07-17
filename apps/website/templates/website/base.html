@@ -44,7 +44,8 @@
             <li class="nav-item"><a class="nav-link" href="{% url 'invoices:list' %}">Invoices</a></li>
         </ul>
     </nav>
-    {% endif %}
+        </ul>
+    </nav>
     <!-- /SIDEBAR -->
     <!-- MAIN PANEL -->
     <div id="mainContent" class="main-panel flex-fill collapsed">
@@ -60,6 +61,7 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'website:about' %}">About</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'website:pricing' %}">Pricing</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'website:contact' %}">Contact</a></li>
+                        {# we removed the Dashboard link here #}
                     </ul>
                     <ul class="navbar-nav">
                         {% if user.is_authenticated %}
