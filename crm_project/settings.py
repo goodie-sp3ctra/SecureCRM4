@@ -17,6 +17,9 @@ ROOT_URLCONF = 'crm_project.urls'
 
 # Application definition
 INSTALLED_APPS = [
+    "jazzmin",  # Jazzmin admin theme (optional, but recommended for better UI)
+
+    # Default Django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -25,33 +28,78 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_celery_beat',
 
-    # Your app
+    # UI / admin helpers
+    "import_export",               # django-import-export
+    "simple_history",              # django-simple-history
+    "adminsortable2",              # django-admin-sortable2
+    "django_otp",
+    "django_otp.plugins.otp_totp",   # TOTP tokens
+    "two_factor",                    # the wrapper UI+flows
+
+    # Your apps
     'apps.website',
     'apps.accounts',
     'apps.dashboard',
     'apps.customers',
-
     'apps.activity.apps.ActivityConfig',
-    'apps.jobs',
+    "apps.jobs.apps.JobsConfig",
     'apps.tasks.apps.TasksConfig',
     'apps.invoices',
 
     # 3rd-party apps
     'rest_framework',
     'corsheaders',
-    'widget_tweaks',  # ✅ Added here
+    'widget_tweaks',
+    'django_filters',                # Django REST Framework filters
+    'django_extensions',             # Useful for development (shell_plus, graph_models, etc.)
+    'django.contrib.humanize',       # Humanize numbers and dates in templates
+    'django.contrib.sites',          # Required for Django Allauth
+    'allauth',                       # Django Allauth for authentication
+    'allauth.account',               # Django Allauth account management    
+    'allauth.socialaccount',         # Django Allauth social account management
+    'allauth.socialaccount.providers.google',  # Google OAuth2 provider
+    'allauth.socialaccount.providers.github',  # GitHub OAuth2 provider
+    'allauth.socialaccount.providers.facebook',  # Facebook OAuth2 provider
+    'allauth.socialaccount.providers.twitter',  # Twitter OAuth2 provider
+    
 ]
+
+SITE_ID = 1 
+
+# minimal allauth settings
+ACCOUNT_LOGIN_METHODS = {"username", "email"}
+ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
+ACCOUNT_EMAIL_VERIFICATION = "optional"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 # Middleware configuration
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django_otp.middleware.OTPMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+
+    # only if using sites framework (e.g. allauth, flatpages, sitemaps):
+    "django.contrib.sites.middleware.CurrentSiteMiddleware",
+
+    # conditional GET support (this replaces the old ETagMiddleware)
+    "django.middleware.http.ConditionalGetMiddleware",
+
+    # clickjacking protection
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+    # locale (if you internationalize)
+    "django.middleware.locale.LocaleMiddleware",
+
+    'django.middleware.cache.FetchFromCacheMiddleware',  # Middleware for caching
+    'django.middleware.cache.UpdateCacheMiddleware',  # Middleware for caching
+    'django.middleware.http.ConditionalGetMiddleware',  # Middleware for conditional GET
 ]
 
 # CORS settings
@@ -78,6 +126,8 @@ TEMPLATES = [
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / "static"]
+ADMIN_STYLES = ["admin/css/local_overrides.css"]
 
 # Media files (uploads)
 MEDIA_URL = '/media/'

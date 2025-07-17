@@ -2,7 +2,7 @@
 from django.db import models
 from django.utils import timezone
 from apps.customers.models import Client          # existing app
-from apps.customers.models import Job                  # existing app
+from apps.jobs.models import Job
 
 
 class Invoice(models.Model):
@@ -58,12 +58,22 @@ class Invoice(models.Model):
     notes        = models.TextField(blank=True)
     created_at   = models.DateTimeField(auto_now_add=True)
     updated_at   = models.DateTimeField(auto_now=True)
+    paid_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="When this invoice was marked PAID",
+    )
 
     class Meta:
         ordering            = ["-issue_date", "-invoice_number"]
         unique_together     = ("client", "invoice_number")     # one client can’t see dup numbers
         verbose_name        = "Invoice"
         verbose_name_plural = "Invoices"
+
+    permissions = [
+            ("can_email_invoice",     "Can e-mail invoice to client"),
+            ("can_mark_invoice_paid", "Can mark invoice paid"),
+        ]
 
     # ---------- helpers ----------
     @property
