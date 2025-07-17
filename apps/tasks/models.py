@@ -1,8 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from apps.customers.models import Client, Job
-
+from apps.customers.models import Client
+from apps.jobs.models import Job
 
 class Task(models.Model):
     # Core
@@ -65,3 +65,8 @@ class Reminder(models.Model):
 
     def __str__(self):
         return f'Reminder for {self.task} at {self.notify_at}'
+
+class Meta:
+        permissions = [
+            ("can_reassign_task", "Can re-assign task to other users"),
+        ]

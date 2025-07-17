@@ -35,3 +35,6 @@ class Activity(models.Model):
 
     def __str__(self):
         return f"{self.timestamp:%Y-%m-%d %H:%M} — {self.event_type}"
+
+    def __str__(self):
+        return f"{self.user} {self.verb}"

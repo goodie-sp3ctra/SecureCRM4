@@ -9,8 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.db.models      import Count
 from django.utils.timezone import now
-
-from apps.customers.models      import Job      # ← FIXED!
+from apps.jobs.models      import Job
 from apps.customers.models import Client
 
 @login_required
