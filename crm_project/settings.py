@@ -17,6 +17,7 @@ ROOT_URLCONF = 'crm_project.urls'
 
 # Application definition
 INSTALLED_APPS = [
+    'django_tenants',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,8 +43,42 @@ INSTALLED_APPS = [
     'widget_tweaks',  # ✅ Added here
 ]
 
+# Multi-tenancy settings
+SHARED_APPS = [
+    'django_tenants',  # Must be first
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    
+    # Apps that are NOT tenant-specific
+    'apps.tenants',  # We'll create this next
+]
+
+TENANT_APPS = [
+    # Apps that ARE tenant-specific (separate data per company)
+    'apps.website',
+    'apps.accounts',
+    'apps.dashboard',
+    'apps.customers',
+    'apps.jobs',
+    'apps.tasks',
+    'apps.invoices',
+    'apps.activity',
+    
+    'rest_framework',
+    'corsheaders',
+    'widget_tweaks',
+]
+
+TENANT_MODEL = "tenants.Organization"
+TENANT_DOMAIN_MODEL = "tenants.Domain"
+
 # Middleware configuration
 MIDDLEWARE = [
+    'django_tenants.middleware.main.TenantMainMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -86,14 +121,18 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Database configuration
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'SecureCRM_2',                # ← PostgreSQL DB name
+        'ENGINE': 'django_tenants.postgresql_backend',
+        'NAME': 'SecureCRM_MultiTenant',  # PostgreSQL name
         'USER': 'admin_user',               # ← PostgreSQL user
         'PASSWORD': 'BAHBEJ-TUHWO2-wYCHEQ',
         'HOST': '156.38.163.242',           # ← Server IP
         'PORT': '5432',
     }
 }
+
+DATABASE_ROUTERS = [
+    'django_tenants.routers.TenantSyncRouter',
+]
 
 # Django Rest Framework settings
 REST_FRAMEWORK = {
