@@ -1,9 +1,11 @@
 # apps/invoices/admin.py
 from django.contrib import admin
 from .models import Invoice
+from django.utils import timezone
+from django.utils.html import format_html
+from crm_project.custom_admin import securecrm_admin_site
 
-
-@admin.register(Invoice)
+@admin.register(Invoice, site=securecrm_admin_site)
 class InvoiceAdmin(admin.ModelAdmin):
     list_display    =   ("invoice_number", "client", "issue_date", "due_date", "total", "status")
     list_filter     =   ("status", "issue_date", "due_date")

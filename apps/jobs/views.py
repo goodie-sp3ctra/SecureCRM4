@@ -1,9 +1,9 @@
 from django.http import JsonResponse
 from django.views.generic import TemplateView
 from django.views.decorators.http import require_POST
-from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
-from apps.customers.models import Job
+from apps.jobs.models import Job
+from django.views.generic import ListView, DetailView
 
 class JobKanbanView(TemplateView):
     template_name = "jobs/kanban.html"
