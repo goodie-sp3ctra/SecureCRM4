@@ -1,4 +1,9 @@
 from django.shortcuts import get_object_or_404, redirect, render
+<<<<<<< HEAD
+=======
+from apps.customers.models import Client
+from apps.activity.models import Activity
+>>>>>>> 02c9a708ff5d44a3d2ff36ef985503d49f1fba63
 from apps.customers.models import Client, Activity
 from django.views.generic import DetailView
 from apps.customers.forms import ClientForm
@@ -25,7 +30,7 @@ class ClientDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        # pull in that contact’s activities
+        # pull in that contactâ€™s activities
         ctx["activities"] = self.object.activities.all()
         return ctx
 

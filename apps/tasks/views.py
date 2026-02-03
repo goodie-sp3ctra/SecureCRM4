@@ -1,9 +1,15 @@
 ﻿from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
+<<<<<<< HEAD
 from django.views.generic import (ListView, DetailView,
                                   CreateView, UpdateView, DeleteView)
 from .models import Task, Reminder
+=======
+from django.views.generic import (ListView, CreateView, UpdateView, DeleteView)
+from .models import Task
+
+>>>>>>> 02c9a708ff5d44a3d2ff36ef985503d49f1fba63
 from .forms import TaskForm, ReminderForm
 
 class TaskListView(LoginRequiredMixin, ListView):
