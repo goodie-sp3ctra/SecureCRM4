@@ -1,9 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
-<<<<<<< HEAD
-=======
 from apps.customers.models import Client
 from apps.activity.models import Activity
->>>>>>> 02c9a708ff5d44a3d2ff36ef985503d49f1fba63
 from apps.customers.models import Client, Activity
 from django.views.generic import DetailView
 from apps.customers.forms import ClientForm

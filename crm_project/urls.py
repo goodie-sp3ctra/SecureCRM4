@@ -27,8 +27,5 @@ urlpatterns =[
     path("jobs/", include(("apps.jobs.urls", "jobs"), namespace="jobs")),
     path("tasks/", include("apps.tasks.urls")),
     path("invoices/", include("apps.invoices.urls")),
-<<<<<<< HEAD
+    path("activity/", include(("apps.activity.urls", "activity"), namespace="activity"))
 ]
-=======
-    path("activity/", include(("apps.activity.urls", "activity"), namespace="activity")),
->>>>>>> 02c9a708ff5d44a3d2ff36ef985503d49f1fba63

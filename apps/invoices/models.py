@@ -1,13 +1,9 @@
 ﻿# apps/invoices/models.py
 from django.db import models
 from django.utils import timezone
-<<<<<<< HEAD
 from apps.customers.models import Client          # existing app
 from apps.customers.models import Job                  # existing app
-=======
 from apps.customers.models import Client
-from apps.jobs.models import Job
->>>>>>> 02c9a708ff5d44a3d2ff36ef985503d49f1fba63
 
 
 

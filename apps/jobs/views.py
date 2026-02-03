@@ -32,8 +32,6 @@ def update_job_status(request):
         job.save()
         return JsonResponse({"ok": True})
     return JsonResponse({"ok": False}, status=400)
-<<<<<<< HEAD
-=======
 
 class JobListView(ListView):
     model = Job
@@ -43,4 +41,3 @@ class JobDetailView(DetailView):
     model = Job
     template_name = "customers/job_detail.html" # and this
     context_object_name = "job"
->>>>>>> 02c9a708ff5d44a3d2ff36ef985503d49f1fba63

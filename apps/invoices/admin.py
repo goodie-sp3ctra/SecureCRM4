@@ -8,8 +8,6 @@ class InvoiceAdmin(admin.ModelAdmin):
     list_display    =   ("invoice_number", "client", "issue_date", "due_date", "total", "status")
     list_filter     =   ("status", "issue_date", "due_date")
     search_fields   =   ("invoice_number", "client__name")
-<<<<<<< HEAD
-=======
     date_hierarchy  =   "issue_date"
     ordering        =   ("invoice_number",)
 
@@ -33,5 +31,4 @@ def mark_paid(self, request, queryset):
 def resend_invoice(self, request, qs):
     for inv in qs:  inv.send_email()
     self.message_user(request, f"Queued {qs.count()} e-mails")
->>>>>>> 02c9a708ff5d44a3d2ff36ef985503d49f1fba63
     ordering        =   ("invoice_number",)
