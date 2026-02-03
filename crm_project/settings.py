@@ -17,9 +17,7 @@ ROOT_URLCONF = 'crm_project.urls'
 
 # Application definition
 INSTALLED_APPS = [
-    "jazzmin",  # Jazzmin admin theme (optional, but recommended for better UI)
-
-    # Default Django apps
+    'django_tenants',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -28,21 +26,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_celery_beat',
 
-    # UI / admin helpers
-    "import_export",               # django-import-export
-    "simple_history",              # django-simple-history
-    "adminsortable2",              # django-admin-sortable2
-    "django_otp",
-    "django_otp.plugins.otp_totp",   # TOTP tokens
-    "two_factor",                    # the wrapper UI+flows
-
-    # Your apps
+    # Your app
     'apps.website',
     'apps.accounts',
     'apps.dashboard',
     'apps.customers',
+
     'apps.activity.apps.ActivityConfig',
-    "apps.jobs.apps.JobsConfig",
+    'apps.jobs',
+    'apps.tasks.apps.TasksConfig',
+    'apps.invoices',
+
+    'apps.activity.apps.ActivityConfig',
+    'apps.jobs',
     'apps.tasks.apps.TasksConfig',
     'apps.invoices',
 
@@ -54,57 +50,53 @@ INSTALLED_APPS = [
     # 3rd-party apps
     'rest_framework',
     'corsheaders',
-    'widget_tweaks',
-    'django_filters',                # Django REST Framework filters
-    'django_extensions',             # Useful for development (shell_plus, graph_models, etc.)
-    'django.contrib.humanize',       # Humanize numbers and dates in templates
-    'django.contrib.sites',          # Required for Django Allauth
-    'allauth',                       # Django Allauth for authentication
-    'allauth.account',               # Django Allauth account management    
-    'allauth.socialaccount',         # Django Allauth social account management
-    'allauth.socialaccount.providers.google',  # Google OAuth2 provider
-    'allauth.socialaccount.providers.github',  # GitHub OAuth2 provider
-    'allauth.socialaccount.providers.facebook',  # Facebook OAuth2 provider
-    'allauth.socialaccount.providers.twitter',  # Twitter OAuth2 provider
-    
+    'widget_tweaks',  # ✅ Added here
 ]
 
-SITE_ID = 1 
+# Multi-tenancy settings
+SHARED_APPS = [
+    'django_tenants',  # Must be first
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    
+    # Apps that are NOT tenant-specific
+    'apps.tenants',  # We'll create this next
+]
 
-# minimal allauth settings
-ACCOUNT_LOGIN_METHODS = {"username", "email"}
-ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
-ACCOUNT_EMAIL_VERIFICATION = "optional"
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
+TENANT_APPS = [
+    # Apps that ARE tenant-specific (separate data per company)
+    'apps.website',
+    'apps.accounts',
+    'apps.dashboard',
+    'apps.customers',
+    'apps.jobs',
+    'apps.tasks',
+    'apps.invoices',
+    'apps.activity',
+    
+    'rest_framework',
+    'corsheaders',
+    'widget_tweaks',
+]
+
+TENANT_MODEL = "tenants.Organization"
+TENANT_DOMAIN_MODEL = "tenants.Domain"
 
 # Middleware configuration
 MIDDLEWARE = [
-    "allauth.account.middleware.AccountMiddleware",
-    "django.middleware.security.SecurityMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django_otp.middleware.OTPMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-
-    # only if using sites framework (e.g. allauth, flatpages, sitemaps):
-    "django.contrib.sites.middleware.CurrentSiteMiddleware",
-
-    # conditional GET support (this replaces the old ETagMiddleware)
-    "django.middleware.http.ConditionalGetMiddleware",
-
-    # clickjacking protection
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-
-    # locale (if you internationalize)
-    "django.middleware.locale.LocaleMiddleware",
-
-    'django.middleware.cache.FetchFromCacheMiddleware',  # Middleware for caching
-    'django.middleware.cache.UpdateCacheMiddleware',  # Middleware for caching
-    'django.middleware.http.ConditionalGetMiddleware',  # Middleware for conditional GET
+    'django_tenants.middleware.main.TenantMainMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 # CORS settings
@@ -131,8 +123,6 @@ TEMPLATES = [
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / "static"]
-ADMIN_STYLES = ["admin/css/local_overrides.css"]
 
 # Media files (uploads)
 MEDIA_URL = '/media/'
@@ -141,14 +131,18 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Database configuration
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'SecureCRM_2',                # ← PostgreSQL DB name
+        'ENGINE': 'django_tenants.postgresql_backend',
+        'NAME': 'SecureCRM_MultiTenant',  # PostgreSQL name
         'USER': 'admin_user',               # ← PostgreSQL user
         'PASSWORD': 'BAHBEJ-TUHWO2-wYCHEQ',
         'HOST': '156.38.163.242',           # ← Server IP
         'PORT': '5432',
     }
 }
+
+DATABASE_ROUTERS = [
+    'django_tenants.routers.TenantSyncRouter',
+]
 
 # Django Rest Framework settings
 REST_FRAMEWORK = {
