@@ -37,6 +37,11 @@ INSTALLED_APPS = [
     'apps.tasks.apps.TasksConfig',
     'apps.invoices',
 
+    'apps.activity.apps.ActivityConfig',
+    'apps.jobs',
+    'apps.tasks.apps.TasksConfig',
+    'apps.invoices',
+
     # 3rd-party apps
     'rest_framework',
     'corsheaders',
